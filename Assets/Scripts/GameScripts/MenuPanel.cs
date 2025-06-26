@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class MenuPanel : MonoBehaviour
@@ -15,7 +12,7 @@ public class MenuPanel : MonoBehaviour
     void Start()
     {
         Title.text = Constants.TITLE_START;
-        Status.text = GetStatusText();
+        //Status.text = GetStatusText();
         // TODO: make best score work
         BestScore.text = GetBestScoreText();
         Tutorial.text = Constants.TUTORIAL;
@@ -24,11 +21,11 @@ public class MenuPanel : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(GameManager.Instance.GameState);
+        //Debug.Log(GameManager.Instance.GameState);
         if (gameObject.activeInHierarchy)
         {
             BestScore.text = GetBestScoreText();
-            Status.text = GetStatusText();
+            //Status.text = GetStatusText();
             // Display information based on whether the game is in start or gameover (dead) state
             if (GameManager.Instance.GameState == GameState.Start)
             {

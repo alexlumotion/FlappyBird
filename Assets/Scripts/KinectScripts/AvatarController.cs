@@ -35,7 +35,7 @@ public class AvatarController : MonoBehaviour
 
 	public void Awake()
 	{
-		LocalPositionText.text = "Position: " + transform.localPosition.ToString();
+		//LocalPositionText.text = "Position: " + transform.localPosition.ToString();
 	}
 
 	// Update the avatar each frame.

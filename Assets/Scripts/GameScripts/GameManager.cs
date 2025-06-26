@@ -1,11 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+
+    public bool startGame = false;
+    public bool startPlaying = false;
+    public bool die = false;
+
     void Awake()
     {
         if (instance == null)
@@ -23,6 +24,26 @@ public class GameManager : MonoBehaviour
         StartGame();
     }
 
+    void Update()
+    {
+        if (startGame)
+        {
+            StartGame();
+            startGame = false;
+        }
+
+        if (startPlaying)
+        {
+            StartPlaying();
+            startPlaying = false;
+        }
+
+        if (die)
+        {
+            Die();
+            die = false;
+        }
+    }
 
     private static GameManager instance;
     public static GameManager Instance

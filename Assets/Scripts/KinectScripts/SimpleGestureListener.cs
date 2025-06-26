@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 using System;
 
 public class SimpleGestureListener : MonoBehaviour, KinectGestures.GestureListenerInterface

@@ -1,15 +1,10 @@
 using UnityEngine;
-using System.Collections;
 
 public class PathGenerator : MonoBehaviour {
 
     public Transform[] PathSpawnPoints;
     public GameObject Path;
 
-    void Start()
-    {
-
-    }
 
     void OnTriggerEnter(Collider hit)
     {
