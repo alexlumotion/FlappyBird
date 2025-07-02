@@ -5,35 +5,36 @@ public class ScoreTrigger : MonoBehaviour
     [Tooltip("Скільки очок додати при активації")]
     public int scoreAmount = 1;
 
-    private GameLogicManager gameLogic;
+    [Tooltip("Тип джерела очок")]
+    public ScoreSourceType sourceType = ScoreSourceType.type1;
 
-    public bool isTrigger = false; // Чи використовувати тригер
+    private GameScoreManager gameScoreManager;
+    public bool isTrigger = false;
 
-    void Awake()
+    void Start()
     {
-        gameLogic = FindObjectOfType<GameLogicManager>();
+        gameScoreManager = GameScoreManager.Instance;
     }
 
     void Update()
     {
         if (isTrigger)
         {
-            isTrigger = false; // Вимикаємо тригер після першого виклику
-            TriggerScore(); // Викликаємо додавання очок
+            isTrigger = false;
+            TriggerScore();
         }
     }
 
-    // Цей метод можна викликати вручну або з OnTriggerEnter/іншої логіки
     public void TriggerScore()
     {
-        if (gameLogic != null)
+        if (gameScoreManager != null)
         {
-            gameLogic.AddScore(scoreAmount);
-            Debug.Log($"✅ Додано {scoreAmount} очок з об'єкта: {gameObject.name}");
+            gameScoreManager.AddScore(scoreAmount, sourceType);
+            Debug.Log($"✅ +{scoreAmount} від {sourceType} ({gameObject.name})");
         }
         else
         {
-            Debug.LogWarning("⚠️ GameLogicManager не знайдено!");
+            Debug.LogWarning("⚠️ GameScoreManager не знайдено!");
         }
     }
 }

@@ -2,12 +2,11 @@ using UnityEngine;
 
 public class GameLogicManager : MonoBehaviour
 {
-    private int score = 0;
 
     void Start()
     {
         GameStateManager.Instance.SetIdle();
-        ResetScore();
+        GameScoreManager.Instance.ResetScore();
     }
 
     // 📦 Методи кнопок
@@ -24,7 +23,7 @@ public class GameLogicManager : MonoBehaviour
     public void OnRestartButtonPressed()
     {
         GameStateManager.Instance.RestartGame();
-        ResetScore();
+        GameScoreManager.Instance.ResetScore();
     }
 
     public void OnIdleButtonPressed()
@@ -35,24 +34,6 @@ public class GameLogicManager : MonoBehaviour
     public void OnGameOverButtonPressed()
     {
         GameStateManager.Instance.GameOver(); 
-    }
-
-
-    // 🎯 Робота з очками
-    public void AddScore(int value)
-    {
-        score += value;
-        Debug.Log("🟡 Очки: " + score);
-    }
-
-    public void ResetScore()
-    {
-        score = 0;
-        Debug.Log("🔁 Очки скинуто");
-    }
-
-    public int GetScore()
-    {
-        return score;
+        GameScoreManager.Instance.ResetScore();
     }
 }

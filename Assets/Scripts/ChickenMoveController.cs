@@ -2,23 +2,36 @@ using UnityEngine;
 
 public class ChickenMoveController : MonoBehaviour
 {
-    public AudioClip soundEffect;
-    public AudioSource audioSource;
     public Transform targetTransform;
-    // Start is called before the first frame update
+    public float moveSpeed = 10f;
+
+    private Vector3 targetPosition;
+
     void Start()
     {
-
+        // Початкова позиція
+        targetPosition = targetTransform.position;
     }
 
-    // Update is called once per frame
     void Update()
+    {
+        HandleInput();
+
+        // Плавне переміщення до цілі
+        targetTransform.position = Vector3.MoveTowards(
+            targetTransform.position,
+            targetPosition,
+            moveSpeed * Time.deltaTime
+        );
+    }
+
+    private void HandleInput()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
             MoveUp();
         }
-        if(Input.GetKeyDown(KeyCode.DownArrow))
+        if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             MoveDown();
         }
@@ -34,34 +47,33 @@ public class ChickenMoveController : MonoBehaviour
 
     public void MoveUp()
     {
-        if (targetTransform.position.y < 3.0f)
+        if (targetPosition.y < 3.0f)
         {
-            targetTransform.position = new Vector3(targetTransform.position.x, targetTransform.position.y + 1f, targetTransform.position.z);
+            targetPosition += Vector3.up;
         }
     }
 
     public void MoveDown()
     {
-        if (targetTransform.position.y > 1.0f)
+        if (targetPosition.y > 1.0f)
         {
-            targetTransform.position = new Vector3(targetTransform.position.x, targetTransform.position.y - 1f, targetTransform.position.z);
+            targetPosition += Vector3.down;
         }
     }
 
     public void MoveLeft()
     {
-        if (targetTransform.position.x >= -3.0f)
+        if (targetPosition.x > -3.0f)
         {
-            targetTransform.position = new Vector3(targetTransform.position.x - 1f, targetTransform.position.y, targetTransform.position.z);
-        }
-    }
-    
-    public void MoveRight()
-    {
-        if(targetTransform.position.x <= 3.0f)
-        {
-            targetTransform.position = new Vector3(targetTransform.position.x + 1f, targetTransform.position.y, targetTransform.position.z);
+            targetPosition += Vector3.left;
         }
     }
 
+    public void MoveRight()
+    {
+        if (targetPosition.x < 3.0f)
+        {
+            targetPosition += Vector3.right;
+        }
+    }
 }

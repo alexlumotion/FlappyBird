@@ -35,6 +35,7 @@ public class GameStateManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+
     /// <summary>
     /// Встановлює новий стан гри
     /// </summary>

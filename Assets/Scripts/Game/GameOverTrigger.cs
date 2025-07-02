@@ -34,4 +34,14 @@ public class GameOverTrigger : MonoBehaviour
             Debug.LogWarning("⚠️ GameLogicManager не знайдено!");
         }
     }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            TriggerGameOver();
+        }
+    }
+
+
 }
