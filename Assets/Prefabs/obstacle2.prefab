@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6769601047359037788}
   - component: {fileID: 352950962059437385}
   - component: {fileID: 2273531023434096797}
+  - component: {fileID: -869827657783307193}
   m_Layer: 0
   m_Name: obstacle2
   m_TagString: Untagged
@@ -119,3 +120,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isTrigger: 0
+--- !u!114 &-869827657783307193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 586405935716656926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1779f9a7533847908ea43d8d29615d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

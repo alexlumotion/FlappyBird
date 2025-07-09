@@ -11,9 +11,13 @@ public class ScoreTrigger : MonoBehaviour
     private GameScoreManager gameScoreManager;
     public bool isTrigger = false;
 
+    private GameObstacleBehaviour obstacleBehaviour;
+
+
     void Start()
     {
         gameScoreManager = GameScoreManager.Instance;
+        obstacleBehaviour = GetComponent<GameObstacleBehaviour>();
     }
 
     void Update()
@@ -31,10 +35,19 @@ public class ScoreTrigger : MonoBehaviour
         {
             gameScoreManager.AddScore(scoreAmount, sourceType);
             Debug.Log($"✅ +{scoreAmount} від {sourceType} ({gameObject.name})");
+            obstacleBehaviour?.PlayDisappearAnimation();
         }
         else
         {
             Debug.LogWarning("⚠️ GameScoreManager не знайдено!");
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            TriggerScore();
         }
     }
 }

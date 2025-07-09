@@ -61,7 +61,7 @@ public class ChickenMoveController : MonoBehaviour
         }
     }
 
-    public void MoveLeft()
+    public void MoveRight()
     {
         if (targetPosition.x > -3.0f)
         {
@@ -69,7 +69,7 @@ public class ChickenMoveController : MonoBehaviour
         }
     }
 
-    public void MoveRight()
+    public void MoveLeft()
     {
         if (targetPosition.x < 3.0f)
         {

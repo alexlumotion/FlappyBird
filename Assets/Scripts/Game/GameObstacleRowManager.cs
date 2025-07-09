@@ -3,200 +3,177 @@ using UnityEngine;
 
 public class GameObstacleRowManager : MonoBehaviour
 {
-    [Header("Global Settings")]
-    public GameObject[] obstaclePrefabs;
-    public int poolSizePerRow = 21;
-    public int rowsCount = 3;
-    public float zSpacing = 10f;
-    public float baseSpawnZ = 44f;
-    public float despawnZ = -2f;
-    public float moveSpeed = 10f;
+    public static GameObstacleRowManager Instance { get; private set; }
 
-    [Header("Row Settings")]
-    public int minObstacleCount = 3;
-    public int maxObstacleCount = 7;
-    public int xMin = -4;
-    public int xMax = 4;
+    [Header("Spawn Settings")]
+    public GameObject[] obstaclePrefabs; // 🔁 масив префабів
+    public int poolSize = 50;
+    public Transform obstacleParent;
+    public Transform rotationSource;
+    public Vector3 spawnRotation;
 
-    private class ObstacleRow
+    [Header("Spawn Points")]
+    public Transform[] spawnPoints; // 5 клітинок
+    public int spawnMin = 0;
+    public int spawnMax = 4; // 0–4, тобто 5 клітинок
+
+    [Header("Rotation Trigger")]
+    public Transform watchedTransform; // об’єкт, який обертається
+    public float angleStep = 1.91f;
+    public int angleMultiplier = 1;
+    private float lastTriggerAngle = 0f;
+
+    [Header("Return Settings")]
+    public float zReturnThreshold = 0f;
+
+    [Header("Animator")]
+    public Animator animator;
+
+    private Queue<GameObject> obstaclePool = new Queue<GameObject>();
+    private List<GameObject> activeObstacles = new List<GameObject>(); // 🟡 додано
+
+    void Awake()
     {
-        public float spawnZ;
-        public Transform container;
-        public List<GameObject> pool = new();
-        public List<GameObject> active = new();
-    }
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
 
-    private List<ObstacleRow> rows = new();
-    private bool isActive = false;
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
 
     void Start()
     {
-        GameStateManager.Instance.OnGameStateChanged += HandleGameStateChanged;
-        InitializeRows();
+        InitializePool();
     }
 
     void Update()
     {
-        if (!isActive) return;
+        float currentAngle = watchedTransform.rotation.eulerAngles.x;
+        float deltaAngle = Mathf.DeltaAngle(lastTriggerAngle, currentAngle);
 
-        foreach (var row in rows)
+        float triggerStep = angleStep * angleMultiplier;
+
+        if (Mathf.Abs(deltaAngle) >= triggerStep)
         {
-            row.container.position += Vector3.back * moveSpeed * Time.deltaTime;
-
-            if (row.container.position.z <= despawnZ)
-            {
-                row.container.position = new Vector3(0, 0, row.spawnZ);
-                ClearRow(row);
-                GenerateObstacleRow(row);
-            }
+            lastTriggerAngle = currentAngle;
+            SpawnObstacles();
         }
     }
 
-    void InitializeRows()
+    void InitializePool()
     {
-        rows.Clear();
-
-        for (int i = 0; i < rowsCount; i++)
+        for (int i = 0; i < poolSize; i++)
         {
-            float rowZ = baseSpawnZ + i * zSpacing;
-
-            GameObject rowGO = new GameObject($"Row_{i + 1}");
-            rowGO.transform.parent = transform;
-            rowGO.transform.position = new Vector3(0, 0, rowZ);
-
-            var row = new ObstacleRow
-            {
-                spawnZ = rowZ,
-                container = rowGO.transform
-            };
-
-            for (int j = 0; j < poolSizePerRow; j++)
-            {
-                int prefabIndex = j % obstaclePrefabs.Length;
-                GameObject prefab = obstaclePrefabs[prefabIndex];
-                GameObject obj = Instantiate(prefab, row.container);
-                obj.SetActive(false);
-                row.pool.Add(obj);
-            }
-
-            GenerateObstacleRow(row);
-            rows.Add(row);
-        }
-    }
-
-    void ClearRow(ObstacleRow row)
-    {
-        foreach (var obj in row.active)
-        {
+            GameObject prefab = GetRandomPrefab();
+            GameObject obj = Instantiate(prefab, Vector3.zero, Quaternion.identity, obstacleParent);
             obj.SetActive(false);
-        }
-        row.active.Clear();
-    }
-
-    void ClearAllRows()
-    {
-        foreach (var row in rows)
-        {
-            row.container.position = new Vector3(0, 0, row.spawnZ);
-            ClearRow(row);
+            obstaclePool.Enqueue(obj);
         }
     }
 
-    void GenerateObstacleRow(ObstacleRow row)
+    GameObject GetRandomPrefab()
     {
-        List<int> availableX = new();
-        for (int x = xMin; x <= xMax; x++)
-            availableX.Add(x);
-
-        int count = Random.Range(minObstacleCount, maxObstacleCount + 1);
-        List<int> chosenX = new();
-
-        while (chosenX.Count < count && availableX.Count > 0)
+        if (obstaclePrefabs.Length == 0)
         {
-            int index = Random.Range(0, availableX.Count);
-            chosenX.Add(availableX[index]);
-            availableX.RemoveAt(index);
+            Debug.LogError("❌ Немає префабів у obstaclePrefabs!");
+            return null;
         }
 
-        if ((xMax - xMin + 1) - chosenX.Count < 1)
-        {
-            int removeIndex = Random.Range(0, chosenX.Count);
-            chosenX.RemoveAt(removeIndex);
-        }
+        int index = Random.Range(0, obstaclePrefabs.Length);
+        return obstaclePrefabs[index];
+    }
 
-        foreach (int x in chosenX)
+    public void SpawnObstacles()
+    {
+        int count = Random.Range(spawnMin, spawnMax + 1);
+        List<int> indices = new List<int> { 0, 1, 2, 3, 4 };
+        Shuffle(indices);
+
+        for (int i = 0; i < count; i++)
         {
-            GameObject obj = GetPooledObstacle(row);
+            int spawnIndex = indices[i];
+            if (spawnIndex >= spawnPoints.Length) continue;
+
+            Transform spawnPoint = spawnPoints[spawnIndex];
+            GameObject obj = GetPooledObject();
+
             if (obj != null)
             {
-                obj.transform.localPosition = new Vector3(x, 0.5f, 0);
+                obj.transform.localScale = Vector3.one;
+                obj.transform.position = spawnPoint.position;
+                obj.transform.rotation = Quaternion.Euler(spawnRotation);
+                obj.transform.SetParent(obstacleParent);
                 obj.SetActive(true);
-                row.active.Add(obj);
+                activeObstacles.Add(obj); // зберігаємо посилання
+
+                var trigger = obj.GetComponent<GameObstacleBehaviour>();
+                if (trigger != null)
+                {
+                    trigger.Init(this, zReturnThreshold);
+                }
             }
         }
     }
 
-    GameObject GetPooledObstacle(ObstacleRow row)
+    GameObject GetPooledObject()
     {
-        foreach (var obj in row.pool)
+        if (obstaclePool.Count > 0)
         {
-            if (!obj.activeInHierarchy)
-                return obj;
+            GameObject obj = obstaclePool.Dequeue();
+            return obj;
         }
 
-        Debug.LogWarning("⚠️ Pool закінчився — збільши poolSizePerRow.");
+        Debug.LogWarning("⚠️ Пул об’єктів вичерпано.");
         return null;
     }
 
-    void HandleGameStateChanged(GameStateMy newState)
+    public void ReturnToPool(GameObject obj)
     {
-        switch (newState)
+        obj.SetActive(false);
+        obj.transform.SetParent(obstacleParent);
+        obstaclePool.Enqueue(obj);
+        activeObstacles.Remove(obj); // видаляємо з активного списку
+    }
+
+    public void ResetAllObstacles()
+    {
+        foreach (var obj in activeObstacles)
         {
-            case GameStateMy.Playing:
-                isActive = true;
-                break;
+            obj.SetActive(false);
+            obj.transform.SetParent(obstacleParent);
+            obstaclePool.Enqueue(obj);
+        }
+        activeObstacles.Clear();
+        Debug.Log("🔁 Усі перешкоди очищено та повернуто до пулу.");
+    }
 
-            case GameStateMy.GameOver:
-                isActive = false;     // зупиняємо рух, поки не стартануть
-                ClearAllRows();       // очищаємо перед запуском
-                foreach (var row in rows)
-                    GenerateObstacleRow(row);       // повне очищення
-                break;
-
-            case GameStateMy.Idle:
-                isActive = false;
-                break;
-            case GameStateMy.Paused:
-                isActive = false;
-                break;
+    void Shuffle(List<int> list)
+    {
+        for (int i = 0; i < list.Count; i++)
+        {
+            int temp = list[i];
+            int randomIndex = Random.Range(i, list.Count);
+            list[i] = list[randomIndex];
+            list[randomIndex] = temp;
         }
     }
 
-    public HashSet<int> GetObstacleXCoordinatesAtZ(float z)
+    public void PlayAnimation()
     {
-        const float epsilon = 0.1f; // точність для порівняння координат Z
-        foreach (var row in rows)
+        if (animator != null)
         {
-            if (Mathf.Abs(row.container.position.z - z) < epsilon)
-            {
-                HashSet<int> xPositions = new();
-                foreach (var obj in row.active)
-                {
-                    int x = Mathf.RoundToInt(obj.transform.localPosition.x);
-                    xPositions.Add(x);
-                }
-                return xPositions;
-            }
+            animator.SetTrigger("Play ON");
         }
-        return new HashSet<int>();
     }
 
-
-    void OnDestroy()
+    public void StopAnimation()
     {
-        if (GameStateManager.Instance != null)
+        if (animator != null)
         {
-            GameStateManager.Instance.OnGameStateChanged -= HandleGameStateChanged;
+            animator.SetTrigger("Play OFF");
         }
     }
 }

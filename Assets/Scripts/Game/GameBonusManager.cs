@@ -168,8 +168,8 @@ public class GameBonusManager : MonoBehaviour
 
     public HashSet<int> GetObstacleXCoordinatesAtZ(float z)
     {
-        if (obstacleManager != null)
-            return obstacleManager.GetObstacleXCoordinatesAtZ(z);
+        //if (obstacleManager != null)
+        //    return obstacleManager.GetObstacleXCoordinatesAtZ(z);
 
         return new HashSet<int>();
     }

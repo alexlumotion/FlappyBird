@@ -3,6 +3,21 @@ using UnityEngine;
 public class GameLogicManager : MonoBehaviour
 {
 
+    public static GameLogicManager Instance { get; private set; }
+
+    void Awake()
+    {
+        // Singleton інстанс
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
     void Start()
     {
         GameStateManager.Instance.SetIdle();
@@ -13,6 +28,8 @@ public class GameLogicManager : MonoBehaviour
     public void OnStartButtonPressed()
     {
         GameStateManager.Instance.StartGame();
+        GameObstacleRowManager.Instance.SpawnObstacles(); // Перший спавн
+        GameObstacleRowManager.Instance.PlayAnimation();
     }
 
     public void OnPauseButtonPressed()
@@ -33,7 +50,9 @@ public class GameLogicManager : MonoBehaviour
 
     public void OnGameOverButtonPressed()
     {
-        GameStateManager.Instance.GameOver(); 
+        GameStateManager.Instance.GameOver();
         GameScoreManager.Instance.ResetScore();
+        GameObstacleRowManager.Instance.StopAnimation();
+        GameObstacleRowManager.Instance.ResetAllObstacles();
     }
 }
