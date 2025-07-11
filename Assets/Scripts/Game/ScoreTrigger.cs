@@ -34,12 +34,12 @@ public class ScoreTrigger : MonoBehaviour
         if (gameScoreManager != null)
         {
             gameScoreManager.AddScore(scoreAmount, sourceType);
-            Debug.Log($"✅ +{scoreAmount} від {sourceType} ({gameObject.name})");
+            //Debug.Log($"✅ +{scoreAmount} від {sourceType} ({gameObject.name})");
             obstacleBehaviour?.PlayDisappearAnimation();
         }
         else
         {
-            Debug.LogWarning("⚠️ GameScoreManager не знайдено!");
+            //Debug.LogWarning("⚠️ GameScoreManager не знайдено!");
         }
     }
 

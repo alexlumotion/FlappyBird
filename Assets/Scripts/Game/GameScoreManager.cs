@@ -60,7 +60,7 @@ public class GameScoreManager : MonoBehaviour
         int finalScore = baseAmount * currentComboMultiplier;
         score += finalScore;
 
-        Debug.Log($"🟡 +{finalScore} очок (множник x{currentComboMultiplier}) → загалом: {score}");
+        //Debug.Log($"🟡 +{finalScore} очок (множник x{currentComboMultiplier}) → загалом: {score}");
 
         OnScoreChanged?.Invoke(score);
     }

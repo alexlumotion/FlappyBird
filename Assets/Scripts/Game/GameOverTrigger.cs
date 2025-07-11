@@ -38,7 +38,7 @@ public class GameOverTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            TriggerGameOver();
+            //TriggerGameOver();
         }
     }
 }

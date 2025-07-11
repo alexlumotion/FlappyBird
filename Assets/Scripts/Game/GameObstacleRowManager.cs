@@ -6,19 +6,19 @@ public class GameObstacleRowManager : MonoBehaviour
     public static GameObstacleRowManager Instance { get; private set; }
 
     [Header("Spawn Settings")]
-    public GameObject[] obstaclePrefabs; // 🔁 масив префабів
+    public GameObject[] obstaclePrefabs;
     public int poolSize = 50;
     public Transform obstacleParent;
     public Transform rotationSource;
     public Vector3 spawnRotation;
 
     [Header("Spawn Points")]
-    public Transform[] spawnPoints; // 5 клітинок
+    public Transform[] spawnPoints;
     public int spawnMin = 0;
-    public int spawnMax = 4; // 0–4, тобто 5 клітинок
+    public int spawnMax = 4;
 
     [Header("Rotation Trigger")]
-    public Transform watchedTransform; // об’єкт, який обертається
+    public Transform watchedTransform;
     public float angleStep = 1.91f;
     public int angleMultiplier = 1;
     private float lastTriggerAngle = 0f;
@@ -30,7 +30,7 @@ public class GameObstacleRowManager : MonoBehaviour
     public Animator animator;
 
     private Queue<GameObject> obstaclePool = new Queue<GameObject>();
-    private List<GameObject> activeObstacles = new List<GameObject>(); // 🟡 додано
+    private List<GameObject> activeObstacles = new List<GameObject>();
 
     void Awake()
     {
@@ -68,8 +68,7 @@ public class GameObstacleRowManager : MonoBehaviour
         for (int i = 0; i < poolSize; i++)
         {
             GameObject prefab = GetRandomPrefab();
-            GameObject obj = Instantiate(prefab, Vector3.zero, Quaternion.identity, obstacleParent);
-            obj.SetActive(false);
+            GameObject obj = Instantiate(prefab, Vector3.zero, Quaternion.identity);
             obstaclePool.Enqueue(obj);
         }
     }
@@ -102,18 +101,18 @@ public class GameObstacleRowManager : MonoBehaviour
 
             if (obj != null)
             {
-                obj.transform.localScale = Vector3.one;
                 obj.transform.position = spawnPoint.position;
-                obj.transform.rotation = Quaternion.Euler(spawnRotation);
+                obj.transform.rotation = Quaternion.identity;
                 obj.transform.SetParent(obstacleParent);
-                obj.SetActive(true);
-                activeObstacles.Add(obj); // зберігаємо посилання
 
-                var trigger = obj.GetComponent<GameObstacleBehaviour>();
-                if (trigger != null)
+                var behaviour = obj.GetComponent<GameObstacleBehaviour>();
+                if (behaviour != null)
                 {
-                    trigger.Init(this, zReturnThreshold);
+                    behaviour.PlayAppearAnimation(); // ✅ Анімація появи
+                    behaviour.Init(this, zReturnThreshold);
                 }
+
+                activeObstacles.Add(obj);
             }
         }
     }
@@ -122,8 +121,7 @@ public class GameObstacleRowManager : MonoBehaviour
     {
         if (obstaclePool.Count > 0)
         {
-            GameObject obj = obstaclePool.Dequeue();
-            return obj;
+            return obstaclePool.Dequeue();
         }
 
         Debug.LogWarning("⚠️ Пул об’єктів вичерпано.");
@@ -132,24 +130,33 @@ public class GameObstacleRowManager : MonoBehaviour
 
     public void ReturnToPool(GameObject obj)
     {
-        obj.SetActive(false);
-        obj.transform.SetParent(obstacleParent);
-        obstaclePool.Enqueue(obj);
-        activeObstacles.Remove(obj); // видаляємо з активного списку
+        var behaviour = obj.GetComponent<GameObstacleBehaviour>();
+        behaviour.PlayDisappearAnimation(() =>
+        {
+            obj.transform.SetParent(obstacleParent);
+            obstaclePool.Enqueue(obj);
+            activeObstacles.Remove(obj);
+        });
     }
 
+    //for Game Over
     public void ResetAllObstacles()
     {
         foreach (var obj in activeObstacles)
         {
-            obj.SetActive(false);
-            obj.transform.SetParent(obstacleParent);
-            obstaclePool.Enqueue(obj);
+            var behaviour = obj.GetComponent<GameObstacleBehaviour>();
+            behaviour.PlayDisappearAnimation(() =>
+            {
+                obj.transform.SetParent(obstacleParent);
+                obstaclePool.Enqueue(obj);
+            });
         }
+
         activeObstacles.Clear();
         Debug.Log("🔁 Усі перешкоди очищено та повернуто до пулу.");
     }
 
+    //for SpawnObstacles
     void Shuffle(List<int> list)
     {
         for (int i = 0; i < list.Count; i++)
