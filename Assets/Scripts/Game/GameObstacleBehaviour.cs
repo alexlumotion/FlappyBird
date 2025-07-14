@@ -41,7 +41,6 @@ public class GameObstacleBehaviour : MonoBehaviour
     public bool playAppear = false;
     public bool playDisappear = false;
     public bool playIdle = false;
-    public bool playWobble = false;
     public bool stopAnimation = false;
 
     void Update()
@@ -78,12 +77,6 @@ public class GameObstacleBehaviour : MonoBehaviour
             playIdle = false;
             PlayIdleAnimation();
         }
-
-        if (playWobble)
-        {
-            playWobble = false;
-            PlayIdleWobble();
-        }
     }
 
     void Start()
@@ -113,8 +106,6 @@ public class GameObstacleBehaviour : MonoBehaviour
 
         StopAnimations();
 
-        Vector3 currentScale = transform.localScale;
-
         float randomDuration = UnityEngine.Random.Range(disappearDurationMin, disappearDurationMax);
 
         currentTween = transform.DOScaleY(0f, randomDuration)
@@ -134,12 +125,9 @@ public class GameObstacleBehaviour : MonoBehaviour
 
         StopAnimations();
 
-        Vector3 initialScale = Vector3.one;
-        transform.localScale = new Vector3(initialScale.x, 0f, initialScale.z);
-
         float randomDuration = UnityEngine.Random.Range(appearDurationMin, appearDurationMax);
 
-        currentTween = transform.DOScaleY(initialScale.y, randomDuration)
+        currentTween = transform.DOScaleY(1f, randomDuration)
             .SetEase(appearEase)
             .OnComplete(() =>
             {
@@ -157,22 +145,5 @@ public class GameObstacleBehaviour : MonoBehaviour
             .DOScale(idleScaleMax, idleScaleMin)
             .SetEase(idleEase)
             .SetLoops(-1, idleLoop);
-    }
-
-    // ♾️ Idle з покачуванням
-    public void PlayIdleWobble()
-    {
-        StopAnimations();
-
-        Sequence idleSequence = DOTween.Sequence();
-
-        idleSequence
-            .Append(transform.DOScale(Vector3.one * 1.05f, 0.6f).SetEase(Ease.InOutSine))
-            .Join(transform.DORotate(new Vector3(0, 0, 5f), 0.6f).SetEase(Ease.InOutSine))
-            .Append(transform.DOScale(Vector3.one, 0.6f).SetEase(Ease.InOutSine))
-            .Join(transform.DORotate(Vector3.zero, 0.6f).SetEase(Ease.InOutSine))
-            .SetLoops(-1);
-
-        currentTween = idleSequence;
     }
 }

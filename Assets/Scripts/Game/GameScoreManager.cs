@@ -9,6 +9,8 @@ public class GameScoreManager : MonoBehaviour
 
     public delegate void ScoreChanged(int newScore);
     public event ScoreChanged OnScoreChanged;
+    public delegate void FinalScoreChanged(int newScore);
+    public event FinalScoreChanged OnFinalScoreChanged;
 
     public delegate void ComboMultiplierChanged(int newMultiplier);
     public event ComboMultiplierChanged OnComboMultiplierChanged;
@@ -76,6 +78,11 @@ public class GameScoreManager : MonoBehaviour
 
         Debug.Log("🔁 Очки скинуто");
         OnScoreChanged?.Invoke(score);
+    }
+
+    public void ShowFinalScore()
+    {
+        OnFinalScoreChanged?.Invoke(score);
     }
 
     public int GetScore()

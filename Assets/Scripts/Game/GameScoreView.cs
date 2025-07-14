@@ -4,6 +4,7 @@ using TMPro;
 public class GameScoreView : MonoBehaviour
 {
     [SerializeField] private TMP_Text scoreText;
+    [SerializeField] private TMP_Text scoreFinalText;
     [SerializeField] private TMP_Text multiplierText;
 
     private Vector3 originalScoreScale;
@@ -24,6 +25,7 @@ public class GameScoreView : MonoBehaviour
         {
             GameScoreManager.Instance.OnScoreChanged += UpdateScore;
             GameScoreManager.Instance.OnComboMultiplierChanged += UpdateMultiplier;
+            GameScoreManager.Instance.OnFinalScoreChanged += UpdateFinalScore;
         }
     }
 
@@ -37,6 +39,11 @@ public class GameScoreView : MonoBehaviour
         if (scoreAnimCoroutine != null)
             StopCoroutine(scoreAnimCoroutine);
         scoreAnimCoroutine = StartCoroutine(AnimateScale(scoreText.transform, originalScoreScale, 1.2f));
+    }
+
+    private void UpdateFinalScore(int newScore)
+    { 
+        scoreFinalText.text = "Ваш рахунок: " + newScore.ToString();
     }
 
     private void UpdateMultiplier(int multiplier)

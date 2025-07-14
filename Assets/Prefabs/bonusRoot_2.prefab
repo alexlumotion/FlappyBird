@@ -27,7 +27,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 0, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5412231707867190169}
@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1779f9a7533847908ea43d8d29615d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obstacleType: 0
+  obstacleType: 1
   appearDurationMin: 0.5
   appearDurationMax: 1
   appearEase: 27
@@ -56,11 +56,10 @@ MonoBehaviour:
   idleScaleMax: 1.05
   idleEase: 4
   idleLoop: 1
-  returnThresholdZ: -2.5
+  returnThresholdZ: 0
   playAppear: 0
   playDisappear: 0
   playIdle: 0
-  playWobble: 0
   stopAnimation: 0
 --- !u!1001 &9083611628926164749
 PrefabInstance:

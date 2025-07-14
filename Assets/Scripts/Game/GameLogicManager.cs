@@ -51,6 +51,7 @@ public class GameLogicManager : MonoBehaviour
     public void OnGameOverButtonPressed()
     {
         GameStateManager.Instance.GameOver();
+        GameScoreManager.Instance.ShowFinalScore();
         GameScoreManager.Instance.ResetScore();
         GameObstacleRowManager.Instance.StopAnimation();
         GameObstacleRowManager.Instance.ResetAllObstacles();
