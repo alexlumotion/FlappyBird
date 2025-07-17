@@ -30,11 +30,13 @@ public class GameLogicManager : MonoBehaviour
         GameStateManager.Instance.StartGame();
         GameObstacleRowManager.Instance.SpawnObstacles(); // Перший спавн
         GameObstacleRowManager.Instance.PlayAnimation();
+        VideoPlayerManager.Instance.ResetVideo();
     }
 
     public void OnPauseButtonPressed()
     {
         GameStateManager.Instance.PauseGame();
+        VideoPlayerManager.Instance.PauseVideo();
     }
 
     public void OnRestartButtonPressed()

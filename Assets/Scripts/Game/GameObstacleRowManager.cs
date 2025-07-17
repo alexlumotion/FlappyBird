@@ -130,13 +130,13 @@ public class GameObstacleRowManager : MonoBehaviour
 
     public void ReturnToPool(GameObject obj)
     {
-        var behaviour = obj.GetComponent<GameObstacleBehaviour>();
-        behaviour.PlayDisappearAnimation(() =>
-        {
+        //var behaviour = obj.GetComponent<GameObstacleBehaviour>();
+        //behaviour.PlayDisappearAnimation(() =>
+        //{
             obj.transform.SetParent(obstacleParent);
             obstaclePool.Enqueue(obj);
             activeObstacles.Remove(obj);
-        });
+        //});
     }
 
     //for Game Over

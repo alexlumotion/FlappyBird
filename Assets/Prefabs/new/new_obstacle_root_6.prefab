@@ -144,6 +144,26 @@ PrefabInstance:
       propertyPath: m_ReflectionProbeUsage
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6559803838590434987, guid: a3999929e190246908070c88a3fa17b2,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6559803838590434987, guid: a3999929e190246908070c88a3fa17b2,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6559803838590434987, guid: a3999929e190246908070c88a3fa17b2,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6559803838590434987, guid: a3999929e190246908070c88a3fa17b2,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: -2845779275431937956, guid: a3999929e190246908070c88a3fa17b2, type: 3}

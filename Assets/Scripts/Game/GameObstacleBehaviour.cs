@@ -49,10 +49,10 @@ public class GameObstacleBehaviour : MonoBehaviour
         if (canReturnToPool && transform.position.z >= returnThresholdZ)
         {
             canReturnToPool = false; // ⛔ щоб більше не викликалося повторно
-            PlayDisappearAnimation(() =>
-            {
+            //PlayDisappearAnimation(() =>
+            //{
                 poolManager.ReturnToPool(gameObject);
-            });
+            //});
         }
         if (stopAnimation)
         {
