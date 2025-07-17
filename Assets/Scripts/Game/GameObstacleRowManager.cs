@@ -9,8 +9,7 @@ public class GameObstacleRowManager : MonoBehaviour
     public GameObject[] obstaclePrefabs;
     public int poolSize = 50;
     public Transform obstacleParent;
-    public Transform rotationSource;
-    public Vector3 spawnRotation;
+
 
     [Header("Spawn Points")]
     public Transform[] spawnPoints;
@@ -25,9 +24,6 @@ public class GameObstacleRowManager : MonoBehaviour
 
     [Header("Return Settings")]
     public float zReturnThreshold = 0f;
-
-    [Header("Animator")]
-    public Animator animator;
 
     private Queue<GameObject> obstaclePool = new Queue<GameObject>();
     private List<GameObject> activeObstacles = new List<GameObject>();
@@ -165,22 +161,6 @@ public class GameObstacleRowManager : MonoBehaviour
             int randomIndex = Random.Range(i, list.Count);
             list[i] = list[randomIndex];
             list[randomIndex] = temp;
-        }
-    }
-
-    public void PlayAnimation()
-    {
-        if (animator != null)
-        {
-            animator.SetTrigger("Play ON");
-        }
-    }
-
-    public void StopAnimation()
-    {
-        if (animator != null)
-        {
-            animator.SetTrigger("Play OFF");
         }
     }
 }
