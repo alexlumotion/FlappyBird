@@ -63,17 +63,17 @@ public class ChickenMoveController : MonoBehaviour
 
     public void MoveRight()
     {
-        if (targetPosition.x > -3.0f)
+        if (targetPosition.x > -1.9f)
         {
-            targetPosition += Vector3.left;
+            targetPosition = new Vector3(targetPosition.x - 1.9f, targetPosition.y, targetPosition.z);
         }
     }
 
     public void MoveLeft()
     {
-        if (targetPosition.x < 3.0f)
+        if (targetPosition.x < 1.9f)
         {
-            targetPosition += Vector3.right;
+            targetPosition = new Vector3(targetPosition.x + 1.9f, targetPosition.y, targetPosition.z);
         }
     }
 }

@@ -4,6 +4,7 @@ using TMPro;
 public class GameScoreView : MonoBehaviour
 {
     [SerializeField] private TMP_Text scoreText;
+    [SerializeField] private TMP_Text bestScoreText;
     [SerializeField] private TMP_Text scoreFinalText;
     [SerializeField] private TMP_Text multiplierText;
 
@@ -26,6 +27,7 @@ public class GameScoreView : MonoBehaviour
             GameScoreManager.Instance.OnScoreChanged += UpdateScore;
             GameScoreManager.Instance.OnComboMultiplierChanged += UpdateMultiplier;
             GameScoreManager.Instance.OnFinalScoreChanged += UpdateFinalScore;
+            GameScoreManager.Instance.OnMaxScoreLoaded += UpdateMaxScore;
         }
     }
 
@@ -40,12 +42,10 @@ public class GameScoreView : MonoBehaviour
             StopCoroutine(scoreAnimCoroutine);
         scoreAnimCoroutine = StartCoroutine(AnimateScale(scoreText.transform, originalScoreScale, 1.2f));
     }
-
     private void UpdateFinalScore(int newScore)
-    { 
+    {
         scoreFinalText.text = "Ваш рахунок: " + newScore.ToString();
     }
-
     private void UpdateMultiplier(int multiplier)
     {
         if (multiplierText == null) return;
@@ -59,6 +59,10 @@ public class GameScoreView : MonoBehaviour
                 StopCoroutine(multiplierAnimCoroutine);
             multiplierAnimCoroutine = StartCoroutine(AnimateScale(multiplierText.transform, originalMultiplierScale, 1.3f));
         }
+    }
+    private void UpdateMaxScore(int maxScore)
+    {
+        bestScoreText.text = "Best Score: " + maxScore.ToString();
     }
 
     private System.Collections.IEnumerator AnimateScale(Transform target, Vector3 original, float maxScale)
@@ -88,4 +92,5 @@ public class GameScoreView : MonoBehaviour
 
         target.localScale = original;
     }
+
 }

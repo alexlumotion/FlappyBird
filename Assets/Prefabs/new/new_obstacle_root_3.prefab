@@ -56,7 +56,7 @@ MonoBehaviour:
   idleScaleMax: 1.05
   idleEase: 4
   idleLoop: 1
-  returnThresholdZ: -2.5
+  returnThresholdZ: 0.5
   playAppear: 0
   playDisappear: 0
   playIdle: 0

@@ -1,32 +1,37 @@
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
+
+//public enum ObstacleType { Obstacle, Bonus }
 
 public class GameObstacleRowManager : MonoBehaviour
 {
     public static GameObstacleRowManager Instance { get; private set; }
 
     [Header("Spawn Settings")]
-    public GameObject[] obstaclePrefabs;
-    public int poolSize = 50;
+    public GameObject[] obstaclePrefabs; // 9 штук
+    public GameObject[] bonusPrefabs;    // 3 штуки
+    public Transform[] spawnPoints;      // 3 точки
     public Transform obstacleParent;
 
-
-    [Header("Spawn Points")]
-    public Transform[] spawnPoints;
-    public int spawnMin = 0;
-    public int spawnMax = 4;
-
-    [Header("Rotation Trigger")]
+    [Header("Spawn Trigger")]
     public Transform watchedTransform;
     public float angleStep = 1.91f;
     public int angleMultiplier = 1;
+
     private float lastTriggerAngle = 0f;
 
-    [Header("Return Settings")]
-    public float zReturnThreshold = 0f;
-
     private Queue<GameObject> obstaclePool = new Queue<GameObject>();
+    private Queue<GameObject> bonusPool = new Queue<GameObject>();
     private List<GameObject> activeObstacles = new List<GameObject>();
+
+    private enum SpawnPattern
+    {
+        OneObstacle,
+        OneBonus,
+        TwoObstacles,
+        ObstacleAndBonus
+    }
+
 
     void Awake()
     {
@@ -42,7 +47,7 @@ public class GameObstacleRowManager : MonoBehaviour
 
     void Start()
     {
-        InitializePool();
+        InitializePools();
     }
 
     void Update()
@@ -55,104 +60,140 @@ public class GameObstacleRowManager : MonoBehaviour
         if (Mathf.Abs(deltaAngle) >= triggerStep)
         {
             lastTriggerAngle = currentAngle;
-            SpawnObstacles();
+            TrySpawnScenario();
         }
     }
 
-    void InitializePool()
+    void InitializePools()
     {
-        for (int i = 0; i < poolSize; i++)
+        foreach (var prefab in obstaclePrefabs)
         {
-            GameObject prefab = GetRandomPrefab();
-            GameObject obj = Instantiate(prefab, Vector3.zero, Quaternion.identity);
+            GameObject obj = Instantiate(prefab);
+            obj.SetActive(false);
             obstaclePool.Enqueue(obj);
         }
-    }
 
-    GameObject GetRandomPrefab()
-    {
-        if (obstaclePrefabs.Length == 0)
+        foreach (var prefab in bonusPrefabs)
         {
-            Debug.LogError("❌ Немає префабів у obstaclePrefabs!");
-            return null;
+            GameObject obj = Instantiate(prefab);
+            obj.SetActive(false);
+            bonusPool.Enqueue(obj);
         }
-
-        int index = Random.Range(0, obstaclePrefabs.Length);
-        return obstaclePrefabs[index];
     }
 
-    public void SpawnObstacles()
+    public void TrySpawnScenario()
     {
-        int count = Random.Range(spawnMin, spawnMax + 1);
-        List<int> indices = new List<int> { 0, 1, 2, 3, 4 };
-        Shuffle(indices);
+        List<SpawnPattern> patterns = new List<SpawnPattern> { 
+            SpawnPattern.OneObstacle, 
+            SpawnPattern.OneBonus, 
+            SpawnPattern.TwoObstacles, 
+            SpawnPattern.ObstacleAndBonus 
+        };
 
-        for (int i = 0; i < count; i++)
+        while (patterns.Count > 0)
         {
-            int spawnIndex = indices[i];
-            if (spawnIndex >= spawnPoints.Length) continue;
+            SpawnPattern selected = patterns[Random.Range(0, patterns.Count)];
 
-            Transform spawnPoint = spawnPoints[spawnIndex];
-            GameObject obj = GetPooledObject();
-
-            if (obj != null)
+            if (CanSpawn(selected))
             {
-                obj.transform.position = spawnPoint.position;
-                obj.transform.rotation = Quaternion.identity;
-                obj.transform.SetParent(obstacleParent);
-
-                var behaviour = obj.GetComponent<GameObstacleBehaviour>();
-                if (behaviour != null)
-                {
-                    behaviour.PlayAppearAnimation(); // ✅ Анімація появи
-                    behaviour.Init(this, zReturnThreshold);
-                }
-
-                activeObstacles.Add(obj);
+                ExecuteSpawn(selected);
+                return;
             }
+
+            patterns.Remove(selected);
+        }
+
+        Debug.LogWarning("❌ Немає достатньо обʼєктів у пулах для жодного варіанту спавну.");
+    }
+
+    bool CanSpawn(SpawnPattern pattern)
+    {
+        switch (pattern)
+        {
+            case SpawnPattern.OneObstacle: return obstaclePool.Count >= 1;
+            case SpawnPattern.OneBonus: return bonusPool.Count >= 1;
+            case SpawnPattern.TwoObstacles: return obstaclePool.Count >= 2;
+            case SpawnPattern.ObstacleAndBonus: return obstaclePool.Count >= 1 && bonusPool.Count >= 1;
+            default: return false;
         }
     }
 
-    GameObject GetPooledObject()
+    void ExecuteSpawn(SpawnPattern pattern)
     {
-        if (obstaclePool.Count > 0)
+        List<int> availableIndexes = new List<int> { 0, 1, 2 };
+        Shuffle(availableIndexes);
+
+        switch (pattern)
         {
-            return obstaclePool.Dequeue();
+            case SpawnPattern.OneObstacle:
+                SpawnFromPool(obstaclePool, availableIndexes[0]);
+                break;
+            case SpawnPattern.OneBonus:
+                SpawnFromPool(bonusPool, availableIndexes[0]);
+                break;
+            case SpawnPattern.TwoObstacles:
+                SpawnFromPool(obstaclePool, availableIndexes[0]);
+                SpawnFromPool(obstaclePool, availableIndexes[1]);
+                break;
+            case SpawnPattern.ObstacleAndBonus:
+                SpawnFromPool(obstaclePool, availableIndexes[0]);
+                SpawnFromPool(bonusPool, availableIndexes[1]);
+                break;
+        }
+    }
+
+    void SpawnFromPool(Queue<GameObject> pool, int spawnPointIndex)
+    {
+        if (pool.Count == 0 || spawnPointIndex >= spawnPoints.Length) return;
+
+        GameObject obj = pool.Dequeue();
+        obj.transform.position = spawnPoints[spawnPointIndex].position;
+        obj.transform.rotation = Quaternion.identity;
+        obj.transform.SetParent(obstacleParent);
+        obj.SetActive(true);
+
+        var behaviour = obj.GetComponent<GameObstacleBehaviour>();
+        if (behaviour != null)
+        {
+            behaviour.Init();
+            behaviour.PlayAppearAnimation();
         }
 
-        Debug.LogWarning("⚠️ Пул об’єктів вичерпано.");
-        return null;
+        activeObstacles.Add(obj);
     }
 
     public void ReturnToPool(GameObject obj)
     {
-        //var behaviour = obj.GetComponent<GameObstacleBehaviour>();
-        //behaviour.PlayDisappearAnimation(() =>
-        //{
-            obj.transform.SetParent(obstacleParent);
+        var behaviour = obj.GetComponent<GameObstacleBehaviour>();
+        if (behaviour != null)
+        {
+            behaviour.StopAnimations();
+        }
+
+        obj.SetActive(false);
+        obj.transform.SetParent(obstacleParent);
+
+        // Визначаємо тип і повертаємо у відповідний пул
+        var type = obj.GetComponent<GameObstacleBehaviour>()?.obstacleType ?? ObstacleType.Obstacle;
+        if (type == ObstacleType.Bonus)
+            bonusPool.Enqueue(obj);
+        else
             obstaclePool.Enqueue(obj);
-            activeObstacles.Remove(obj);
-        //});
+
+        activeObstacles.Remove(obj);
     }
 
-    //for Game Over
     public void ResetAllObstacles()
     {
-        foreach (var obj in activeObstacles)
+        foreach (var obj in new List<GameObject>(activeObstacles))
         {
-            var behaviour = obj.GetComponent<GameObstacleBehaviour>();
-            behaviour.PlayDisappearAnimation(() =>
-            {
-                obj.transform.SetParent(obstacleParent);
-                obstaclePool.Enqueue(obj);
-            });
+            ReturnToPool(obj);
         }
 
         activeObstacles.Clear();
-        Debug.Log("🔁 Усі перешкоди очищено та повернуто до пулу.");
+        //Debug.Log("🔁 Усі обʼєкти повернуто в пул.");
     }
 
-    //for SpawnObstacles
     void Shuffle(List<int> list)
     {
         for (int i = 0; i < list.Count; i++)

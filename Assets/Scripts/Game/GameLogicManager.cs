@@ -28,7 +28,7 @@ public class GameLogicManager : MonoBehaviour
     public void OnStartButtonPressed()
     {
         GameStateManager.Instance.StartGame();
-        GameObstacleRowManager.Instance.SpawnObstacles(); // Перший спавн
+        GameObstacleRowManager.Instance.TrySpawnScenario(); // Перший спавн
         RoadAnimationManager.Instance.PlayAnimation();
         VideoPlayerManager.Instance.ResetVideo();
     }
@@ -53,8 +53,7 @@ public class GameLogicManager : MonoBehaviour
     public void OnGameOverButtonPressed()
     {
         GameStateManager.Instance.GameOver();
-        GameScoreManager.Instance.ShowFinalScore();
-        GameScoreManager.Instance.ResetScore();
+        GameScoreManager.Instance.GameOver();
         RoadAnimationManager.Instance.StopAnimation();
         GameObstacleRowManager.Instance.ResetAllObstacles();
     }

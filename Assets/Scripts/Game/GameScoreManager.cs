@@ -11,6 +11,8 @@ public class GameScoreManager : MonoBehaviour
     public event ScoreChanged OnScoreChanged;
     public delegate void FinalScoreChanged(int newScore);
     public event FinalScoreChanged OnFinalScoreChanged;
+    public delegate void MaxScoreLoaded(int newScore);
+    public event MaxScoreLoaded OnMaxScoreLoaded;
 
     public delegate void ComboMultiplierChanged(int newMultiplier);
     public event ComboMultiplierChanged OnComboMultiplierChanged;
@@ -24,6 +26,8 @@ public class GameScoreManager : MonoBehaviour
     private int currentComboMultiplier = 1;
     public int CurrentComboMultiplier => currentComboMultiplier;
 
+    public int maxPlayerScore = 0;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -34,6 +38,26 @@ public class GameScoreManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+    }
+
+    void Start()
+    {
+        LoadMaxScore();
+    }
+
+    void LoadMaxScore()
+    {
+        maxPlayerScore = PlayerPrefs.GetInt("player_score", 15);
+        OnMaxScoreLoaded?.Invoke(maxPlayerScore);
+    }
+
+    void SaveMaxScore()
+    {
+        if (score > maxPlayerScore)
+        {
+            PlayerPrefs.SetInt("player_score", score);
+            PlayerPrefs.Save(); // не обов’язково, але краще явно викликати
+        }
     }
 
     public void AddScore(int baseAmount, ScoreSourceType sourceType)
@@ -76,7 +100,7 @@ public class GameScoreManager : MonoBehaviour
         currentComboMultiplier = 1;
         OnComboMultiplierChanged?.Invoke(currentComboMultiplier);
 
-        Debug.Log("🔁 Очки скинуто");
+        //Debug.Log("🔁 Очки скинуто");
         OnScoreChanged?.Invoke(score);
     }
 
@@ -89,4 +113,13 @@ public class GameScoreManager : MonoBehaviour
     {
         return score;
     }
+
+    public void GameOver()
+    {
+        SaveMaxScore();
+        LoadMaxScore();
+        ShowFinalScore();
+        ResetScore();
+    }
+
 }

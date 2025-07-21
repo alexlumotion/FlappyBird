@@ -37,6 +37,9 @@ public class GameObstacleBehaviour : MonoBehaviour
     private bool isAnimating = false;
     private Tween currentTween;
 
+    [Header("Back to pools")]
+    public Vector3 resetScale = new Vector3(1, 0, 1);
+
     [Header("Dev tools")]
     public bool playAppear = false;
     public bool playDisappear = false;
@@ -49,6 +52,7 @@ public class GameObstacleBehaviour : MonoBehaviour
         if (canReturnToPool && transform.position.z >= returnThresholdZ)
         {
             canReturnToPool = false; // ⛔ щоб більше не викликалося повторно
+            transform.localScale = resetScale;
             //PlayDisappearAnimation(() =>
             //{
                 poolManager.ReturnToPool(gameObject);
@@ -84,10 +88,8 @@ public class GameObstacleBehaviour : MonoBehaviour
         poolManager = GameObstacleRowManager.Instance;
     }
 
-    public void Init(GameObstacleRowManager manager, float zThreshold)
+    public void Init()
     {
-        poolManager = GameObstacleRowManager.Instance;
-        returnThresholdZ = zThreshold;
         canReturnToPool = true;
     }
 
