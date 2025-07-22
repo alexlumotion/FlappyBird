@@ -3,7 +3,27 @@ guid: 77e226a3473344d7bb513059023270d6
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Egg_1_diffuse
+    second: {fileID: 2800000, guid: a78136d7d4ecc48cf919a570bbe02aa2, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Egg_2_diffuse
+    second: {fileID: 2800000, guid: 8b0ecdeec68f94b88a38e2bfd3412801, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Egg_3_diffuse
+    second: {fileID: 2800000, guid: 89d9a37fb22e04fa38e7369fa9dedb44, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Egg_4_diffuse
+    second: {fileID: 2800000, guid: 6bd4722c65b8244159c6f316abc23fb4, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0

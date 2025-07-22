@@ -31,6 +31,7 @@ public class GameLogicManager : MonoBehaviour
         GameObstacleRowManager.Instance.TrySpawnScenario(); // Перший спавн
         RoadAnimationManager.Instance.PlayAnimation();
         VideoPlayerManager.Instance.ResetVideo();
+        RockPoolManager.Instance.SpawnRocks();
     }
 
     public void OnPauseButtonPressed()
@@ -56,5 +57,6 @@ public class GameLogicManager : MonoBehaviour
         GameScoreManager.Instance.GameOver();
         RoadAnimationManager.Instance.StopAnimation();
         GameObstacleRowManager.Instance.ResetAllObstacles();
+        RockPoolManager.Instance.ResetAllRocks();
     }
 }
