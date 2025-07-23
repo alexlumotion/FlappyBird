@@ -7,6 +7,11 @@ public class RoadAnimationManager : MonoBehaviour
     [Header("Animator")]
     public Animator animator;
 
+    [Header("Speed Settings")]
+    [Range(0.1f, 5f)]
+    public float initialSpeed = 1.0f;
+    public float speedStep = 0.1f;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -17,6 +22,31 @@ public class RoadAnimationManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+    }
+
+    void Start()
+    {
+        SetSpeed(initialSpeed);
+    }
+
+    // void Update()
+    // {
+    //     // Для тесту: керування з клавіатури
+    //     if (Input.GetKeyDown(KeyCode.UpArrow))
+    //     {
+    //         SetSpeed(animator.speed + speedStep);
+    //     }
+
+    //     if (Input.GetKeyDown(KeyCode.DownArrow))
+    //     {
+    //         SetSpeed(animator.speed - speedStep);
+    //     }
+    // }
+
+    public void SetSpeed(float speed)
+    {
+        speed = Mathf.Clamp(speed, 0.1f, 5f);
+        animator.speed = speed;
     }
 
     public void PlayAnimation()
