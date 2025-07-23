@@ -1,16 +1,14 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-//public enum ObstacleType { Obstacle, Bonus }
-
 public class GameObstacleRowManager : MonoBehaviour
 {
     public static GameObstacleRowManager Instance { get; private set; }
 
     [Header("Spawn Settings")]
-    public GameObject[] obstaclePrefabs; // 9 штук
-    public GameObject[] bonusPrefabs;    // 3 штуки
-    public Transform[] spawnPoints;      // 3 точки
+    public GameObject[] obstaclePrefabs;
+    public GameObject[] bonusPrefabs;
+    public Transform[] spawnPoints;
     public Transform obstacleParent;
 
     [Header("Spawn Trigger")]
@@ -31,7 +29,6 @@ public class GameObstacleRowManager : MonoBehaviour
         TwoObstacles,
         ObstacleAndBonus
     }
-
 
     void Awake()
     {
@@ -69,25 +66,25 @@ public class GameObstacleRowManager : MonoBehaviour
         foreach (var prefab in obstaclePrefabs)
         {
             GameObject obj = Instantiate(prefab);
-            obj.SetActive(false);
+            SetVisible(obj, false);
             obstaclePool.Enqueue(obj);
         }
 
         foreach (var prefab in bonusPrefabs)
         {
             GameObject obj = Instantiate(prefab);
-            obj.SetActive(false);
+            SetVisible(obj, false);
             bonusPool.Enqueue(obj);
         }
     }
 
     public void TrySpawnScenario()
     {
-        List<SpawnPattern> patterns = new List<SpawnPattern> { 
-            SpawnPattern.OneObstacle, 
-            SpawnPattern.OneBonus, 
-            SpawnPattern.TwoObstacles, 
-            SpawnPattern.ObstacleAndBonus 
+        List<SpawnPattern> patterns = new List<SpawnPattern> {
+            SpawnPattern.OneObstacle,
+            SpawnPattern.OneBonus,
+            SpawnPattern.TwoObstacles,
+            SpawnPattern.ObstacleAndBonus
         };
 
         while (patterns.Count > 0)
@@ -150,7 +147,8 @@ public class GameObstacleRowManager : MonoBehaviour
         obj.transform.position = spawnPoints[spawnPointIndex].position;
         obj.transform.rotation = Quaternion.identity;
         obj.transform.SetParent(obstacleParent);
-        obj.SetActive(true);
+
+        SetVisible(obj, true);
 
         var behaviour = obj.GetComponent<GameObstacleBehaviour>();
         if (behaviour != null)
@@ -170,11 +168,10 @@ public class GameObstacleRowManager : MonoBehaviour
             behaviour.StopAnimations();
         }
 
-        obj.SetActive(false);
-        obj.transform.SetParent(obstacleParent);
+        SetVisible(obj, false);
+        obj.transform.SetParent(transform);
 
-        // Визначаємо тип і повертаємо у відповідний пул
-        var type = obj.GetComponent<GameObstacleBehaviour>()?.obstacleType ?? ObstacleType.Obstacle;
+        var type = behaviour?.obstacleType ?? ObstacleType.Obstacle;
         if (type == ObstacleType.Bonus)
             bonusPool.Enqueue(obj);
         else
@@ -191,7 +188,7 @@ public class GameObstacleRowManager : MonoBehaviour
         }
 
         activeObstacles.Clear();
-        //Debug.Log("🔁 Усі обʼєкти повернуто в пул.");
+        Debug.Log("🔁 Усі обʼєкти повернуто в пул.");
     }
 
     void Shuffle(List<int> list)
@@ -202,6 +199,15 @@ public class GameObstacleRowManager : MonoBehaviour
             int randomIndex = Random.Range(i, list.Count);
             list[i] = list[randomIndex];
             list[randomIndex] = temp;
+        }
+    }
+
+    void SetVisible(GameObject obj, bool visible)
+    {
+        var renderers = obj.GetComponentsInChildren<Renderer>();
+        foreach (var renderer in renderers)
+        {
+            renderer.enabled = visible;
         }
     }
 }
