@@ -98,7 +98,7 @@ public class RockPoolManager : MonoBehaviour
                 }
 
                 // Random scale
-                float scale = Random.Range(0.2f, 0.25f);
+                float scale = Random.Range(0.25f, 0.35f);
                 rock.transform.localScale = new Vector3(scale, scale, scale);
 
                 // Random rotation
