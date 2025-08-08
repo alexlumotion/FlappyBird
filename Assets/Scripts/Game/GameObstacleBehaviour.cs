@@ -1,5 +1,4 @@
 using UnityEngine;
-using DG.Tweening;
 using System;
 
 public enum ObstacleType
@@ -13,38 +12,15 @@ public class GameObstacleBehaviour : MonoBehaviour
     [Header("Type Settings")]
     public ObstacleType obstacleType = ObstacleType.Obstacle;
 
-    [Header("Appear Settings")]
-    public float appearDurationMin = 0.5f;
-    public float appearDurationMax = 1.0f;
-    public Ease appearEase = Ease.OutBack;
-
-    [Header("DisAppear Settings")]
-    public float disappearDurationMin = 0.25f;
-    public float disappearDurationMax = 0.45f;
-    public Ease disappearEase = Ease.InBack;
-
-    [Header("Idle Settings")]
-    public float idleScaleMin = 0.65f;
-    public float idleScaleMax = 1.05f;
-    public Ease idleEase = Ease.InOutSine;
-    public LoopType idleLoop = LoopType.Yoyo;
-
     [Header("Return to pool")]
     private GameObstacleRowManager poolManager;
     public float returnThresholdZ = 0f;
     private bool canReturnToPool = false;
 
-    private bool isAnimating = false;
-    private Tween currentTween;
-
     [Header("Back to pools")]
     public Vector3 resetScale = new Vector3(1, 0, 1);
 
-    [Header("Dev tools")]
-    public bool playAppear = false;
-    public bool playDisappear = false;
-    public bool playIdle = false;
-    public bool stopAnimation = false;
+    public GameObstacleAnimations animations;
 
     void Update()
     {
@@ -53,39 +29,14 @@ public class GameObstacleBehaviour : MonoBehaviour
         {
             canReturnToPool = false; // ⛔ щоб більше не викликалося повторно
             transform.localScale = resetScale;
-            //PlayDisappearAnimation(() =>
-            //{
-                poolManager.ReturnToPool(gameObject);
-            //});
-        }
-        if (stopAnimation)
-        {
-            stopAnimation = false;
-            StopAnimations();
-        }
-        // Дебагові тригери через інспектор
-        if (playAppear)
-        {
-            playAppear = false;
-            PlayAppearAnimation();
-        }
-
-        if (playDisappear)
-        {
-            playDisappear = false;
-            PlayDisappearAnimation();
-        }
-
-        if (playIdle)
-        {
-            playIdle = false;
-            PlayIdleAnimation();
+            poolManager.ReturnToPool(gameObject);
         }
     }
 
     void Start()
     {
         poolManager = GameObstacleRowManager.Instance;
+        animations = GetComponent<GameObstacleAnimations>();
     }
 
     public void Init()
@@ -95,57 +46,25 @@ public class GameObstacleBehaviour : MonoBehaviour
 
     public void StopAnimations()
     {
-        transform.DOKill();
-        currentTween = null;
-        isAnimating = false;
+        animations.StopAnimations();
     }
 
     // 1️⃣ Зникнення (scale 1 → 0) з колбеком
     public void PlayDisappearAnimation(Action onComplete = null)
     {
-        if (isAnimating) return;
-        isAnimating = true;
-
-        StopAnimations();
-
-        float randomDuration = UnityEngine.Random.Range(disappearDurationMin, disappearDurationMax);
-
-        currentTween = transform.DOScaleY(0f, randomDuration)
-            .SetEase(disappearEase)
-            .OnComplete(() =>
-            {
-                isAnimating = false;
-                onComplete?.Invoke();
-            });
+        animations.PlayDisappearAnimation(onComplete);
     }
 
     // 2️⃣ Поява (scale 0 → 1)
     public void PlayAppearAnimation(Action onComplete = null)
     {
-        if (isAnimating) return;
-        isAnimating = true;
-
-        StopAnimations();
-
-        float randomDuration = UnityEngine.Random.Range(appearDurationMin, appearDurationMax);
-
-        currentTween = transform.DOScaleY(1f, randomDuration)
-            .SetEase(appearEase)
-            .OnComplete(() =>
-            {
-                isAnimating = false;
-                onComplete?.Invoke();
-            });
+        animations.PlayAppearAnimation(onComplete);
     }
 
     // ♾️ Idle "дихання"
     public void PlayIdleAnimation()
     {
-        StopAnimations();
-
-        currentTween = transform
-            .DOScale(idleScaleMax, idleScaleMin)
-            .SetEase(idleEase)
-            .SetLoops(-1, idleLoop);
+        animations.PlayIdleAnimation();
     }
+    
 }

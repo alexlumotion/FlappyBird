@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6356980019918612195}
   - component: {fileID: -3910626935494165502}
+  - component: {fileID: 5161268506304452344}
   m_Layer: 0
   m_Name: new_obstacle_root_5
   m_TagString: Untagged
@@ -46,18 +47,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   obstacleType: 0
+  returnThresholdZ: 0.5
+  resetScale: {x: 1, y: 0, z: 1}
+  animations: {fileID: 0}
+--- !u!114 &5161268506304452344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8274384085912203340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 204296a9f8581417b87bab631d5cc57c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   appearDurationMin: 0.5
   appearDurationMax: 1
   appearEase: 27
   disappearDurationMin: 0.25
-  disappearDurationMax: 1
+  disappearDurationMax: 0.45
   disappearEase: 26
   idleScaleMin: 0.65
   idleScaleMax: 1.05
   idleEase: 4
   idleLoop: 1
-  returnThresholdZ: 0.5
-  resetScale: {x: 1, y: 0, z: 1}
   playAppear: 0
   playDisappear: 0
   playIdle: 0
