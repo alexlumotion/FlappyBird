@@ -15,21 +15,29 @@ public class GameObstacleBehaviour : MonoBehaviour
     [Header("Return to pool")]
     private GameObstacleRowManager poolManager;
     public float returnThresholdZ = 0f;
-    private bool canReturnToPool = false;
+    public bool canReturnToPool = false;
 
     [Header("Back to pools")]
     public Vector3 resetScale = new Vector3(1, 0, 1);
 
     public GameObstacleAnimations animations;
 
+    public float testZ = 0f;
+
     void Update()
     {
+        testZ = transform.position.z;
         // 📉 Коли обʼєкт перейшов поріг по Z — запускаємо анімацію зникнення
         if (canReturnToPool && transform.position.z >= returnThresholdZ)
         {
             canReturnToPool = false; // ⛔ щоб більше не викликалося повторно
-            transform.localScale = resetScale;
-            poolManager.ReturnToPool(gameObject);
+            //transform.localScale = resetScale;
+            //poolManager.ReturnToPool(gameObject);
+            //PlayDisappearAnimation();
+            PlayDisappearAnimation(() =>
+                {
+                    poolManager.ReturnToPool(gameObject);
+                });
         }
     }
 
@@ -52,13 +60,30 @@ public class GameObstacleBehaviour : MonoBehaviour
     // 1️⃣ Зникнення (scale 1 → 0) з колбеком
     public void PlayDisappearAnimation(Action onComplete = null)
     {
-        animations.PlayDisappearAnimation(onComplete);
+        animations.PlayDisappearAnimation(() =>
+            {
+                //if (GameStateManager.Instance.CurrentState == GameStateMy.GameOver)
+                //{
+                    poolManager.ReturnToPool(gameObject);
+                //}
+            });
     }
 
     // 2️⃣ Поява (scale 0 → 1)
     public void PlayAppearAnimation(Action onComplete = null)
     {
-        animations.PlayAppearAnimation(onComplete);
+        animations.PlayAppearAnimation(() =>
+            {
+                if (GameStateManager.Instance.CurrentState == GameStateMy.GameOver)
+                {
+                    PlayDisappearAnimation();
+                }
+                else
+                {
+                    PlayIdleAnimation();
+                }
+                
+            });
     }
 
     // ♾️ Idle "дихання"

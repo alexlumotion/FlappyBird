@@ -168,6 +168,14 @@ public class GameObstacleRowManager : MonoBehaviour
             behaviour.StopAnimations();
         }
 
+        // 🔹 Встановлюємо нову позицію — випадковий spawn point
+        if (spawnPoints != null && spawnPoints.Length > 0)
+        {
+            var randomIndex = UnityEngine.Random.Range(0, spawnPoints.Length);
+            obj.transform.position = spawnPoints[randomIndex].position;
+            obj.transform.localScale = new Vector3(1, 0, 1);
+        }
+
         SetVisible(obj, false);
         obj.transform.SetParent(transform);
 

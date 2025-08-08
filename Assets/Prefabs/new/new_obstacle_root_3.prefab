@@ -47,9 +47,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   obstacleType: 0
-  returnThresholdZ: 0.5
+  returnThresholdZ: -2.75
+  canReturnToPool: 0
   resetScale: {x: 1, y: 0, z: 1}
   animations: {fileID: 0}
+  testZ: 0
 --- !u!114 &-3583495045753057991
 MonoBehaviour:
   m_ObjectHideFlags: 0
