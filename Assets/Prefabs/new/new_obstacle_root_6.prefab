@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 432446002243801788}
   - component: {fileID: -4919148959477158704}
   - component: {fileID: 3023703634509189934}
+  - component: {fileID: 2262070580078961779}
   m_Layer: 0
   m_Name: new_obstacle_root_6
   m_TagString: Untagged
@@ -28,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 0, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7588894642558730888}
@@ -78,6 +79,106 @@ MonoBehaviour:
   playDisappear: 0
   playIdle: 0
   stopAnimation: 0
+--- !u!114 &2262070580078961779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4907513638720524680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dc6fa995bbbb4e089ca774f3c956c09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mode: 0
+  bubbleMaterials:
+  - {fileID: 2100000, guid: c26120a1401bd4a0cb7311996901001d, type: 2}
+  - {fileID: 2100000, guid: fb37d5060a8d54e6fb6e9208dfdc6a86, type: 2}
+  - {fileID: 2100000, guid: d9371cdf76d344766aed2df25cc94f87, type: 2}
+  - {fileID: 2100000, guid: fe163d0f2b2d64cafbb66cbf8c975124, type: 2}
+  - {fileID: 2100000, guid: 775a656c0395048cb9d6385fbff99af5, type: 2}
+  fromMeshVerticesSettings:
+    lifetime: 3
+    sizeRange: {x: 0.2, y: 0.5}
+    speedY: 0.5
+    emissionRate: 5
+    useVelocityOverLifetime: 1
+    velocityYRange: {x: 0.4, y: 0.6}
+    velocityXRange: {x: 0, y: 0}
+    velocityZRange: {x: 0, y: 0}
+    useNoise: 0
+    noiseStrength: 0.1
+    noiseFrequency: 0.5
+    useBurst: 0
+    minBurstCount: 3
+    maxBurstCount: 7
+    burstInterval: 1
+  fromBottomToTopSettings:
+    lifetime: 3
+    sizeRange: {x: 0.2, y: 0.5}
+    speedY: 0.5
+    emissionRate: 5
+    useVelocityOverLifetime: 1
+    velocityYRange: {x: 0.4, y: 0.6}
+    velocityXRange: {x: 0, y: 0}
+    velocityZRange: {x: 0, y: 0}
+    useNoise: 0
+    noiseStrength: 0.1
+    noiseFrequency: 0.5
+    useBurst: 0
+    minBurstCount: 3
+    maxBurstCount: 7
+    burstInterval: 1
+  pulsedClusterSettings:
+    lifetime: 3
+    sizeRange: {x: 0.2, y: 0.5}
+    speedY: 0.5
+    emissionRate: 5
+    useVelocityOverLifetime: 1
+    velocityYRange: {x: 0.4, y: 0.6}
+    velocityXRange: {x: 0, y: 0}
+    velocityZRange: {x: 0, y: 0}
+    useNoise: 0
+    noiseStrength: 0.1
+    noiseFrequency: 0.5
+    useBurst: 0
+    minBurstCount: 3
+    maxBurstCount: 7
+    burstInterval: 1
+  randomAreaSettings:
+    lifetime: 3
+    sizeRange: {x: 0.2, y: 0.5}
+    speedY: 0.5
+    emissionRate: 5
+    useVelocityOverLifetime: 1
+    velocityYRange: {x: 0.4, y: 0.6}
+    velocityXRange: {x: 0, y: 0}
+    velocityZRange: {x: 0, y: 0}
+    useNoise: 0
+    noiseStrength: 0.1
+    noiseFrequency: 0.5
+    useBurst: 0
+    minBurstCount: 3
+    maxBurstCount: 7
+    burstInterval: 1
+  edgeEmissionSettings:
+    lifetime: 3
+    sizeRange: {x: 0.2, y: 0.5}
+    speedY: 0.5
+    emissionRate: 5
+    useVelocityOverLifetime: 1
+    velocityYRange: {x: 0.4, y: 0.6}
+    velocityXRange: {x: 0, y: 0}
+    velocityZRange: {x: 0, y: 0}
+    useNoise: 0
+    noiseStrength: 0.1
+    noiseFrequency: 0.5
+    useBurst: 0
+    minBurstCount: 3
+    maxBurstCount: 7
+    burstInterval: 1
+  randomIndex: 0
 --- !u!1001 &7988138915337430371
 PrefabInstance:
   m_ObjectHideFlags: 0

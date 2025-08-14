@@ -52,7 +52,7 @@ public class BubbleEmitterController : MonoBehaviour
     public BubbleMode mode = BubbleMode.FromBottomToTop;
 
     [Header("Матеріал спрайта бульбашки")]
-    public Material bubbleMaterial;
+    public Material[] bubbleMaterials;
 
     [Header("Налаштування для FromMeshVertices")]
     public AdvancedBubbleSettings fromMeshVerticesSettings = new AdvancedBubbleSettings();
@@ -69,8 +69,18 @@ public class BubbleEmitterController : MonoBehaviour
     [Header("Налаштування для EdgeEmission")]
     public AdvancedBubbleSettings edgeEmissionSettings = new AdvancedBubbleSettings();
 
+    public int randomIndex = 0;
+
+    public bool start, stop = false;
+
+    public ParticleSystem bubbleSystem;
+
     private void Start()
     {
+        randomIndex = Random.Range(0, bubbleMaterials.Length);
+
+        mode = BubbleMode.FromMeshVertices;
+
         switch (mode)
         {
             case BubbleMode.FromMeshVertices:
@@ -98,13 +108,27 @@ public class BubbleEmitterController : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        if (start)
+        {
+            start = false;
+            StartEmitting();
+        }
+        if (stop)
+        {
+            stop = false;
+            StopEmitting();
+        }
+    }
+
     void CreateFromVertices(AdvancedBubbleSettings settings)
     {
         GameObject emitter = CreateBaseEmitter("Bubble_FromVertices", settings);
 
         var shape = emitter.GetComponent<ParticleSystem>().shape;
         shape.shapeType = ParticleSystemShapeType.Mesh;
-        shape.mesh = GetComponent<MeshFilter>().sharedMesh;
+        shape.mesh = GetComponentInChildren<MeshFilter>().sharedMesh;
         shape.meshShapeType = ParticleSystemMeshShapeType.Vertex;
     }
 
@@ -160,10 +184,14 @@ public class BubbleEmitterController : MonoBehaviour
 
         var ps = go.AddComponent<ParticleSystem>();
         var renderer = go.GetComponent<ParticleSystemRenderer>();
-        renderer.material = bubbleMaterial;
+
+        ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+
+        renderer.material = bubbleMaterials[randomIndex];
         renderer.renderMode = ParticleSystemRenderMode.Billboard;
 
         var main = ps.main;
+        main.playOnAwake = false;
         main.loop = true;
         main.startLifetime = settings.lifetime;
         main.startSpeed = settings.speedY;
@@ -221,6 +249,25 @@ public class BubbleEmitterController : MonoBehaviour
         );
         colorOverLifetime.color = grad;
 
+        bubbleSystem = ps;
+
         return go;
+    }
+
+    public void StartEmitting()
+    {
+        if (bubbleSystem != null)
+        {
+            bubbleSystem.Play();
+        }
+    }
+
+    public void StopEmitting()
+    {
+        if (bubbleSystem != null)
+        {
+            //bubbleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            bubbleSystem.Stop();
+        }
     }
 }

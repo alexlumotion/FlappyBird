@@ -46,10 +46,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1779f9a7533847908ea43d8d29615d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obstacleType: 0
+  obstacleType: 1
   returnThresholdZ: 0.5
+  canReturnToPool: 0
   resetScale: {x: 1, y: 0, z: 1}
   animations: {fileID: 0}
+  bubbleEmitterController: {fileID: 0}
+  testZ: 0
 --- !u!114 &-3633016823359638481
 MonoBehaviour:
   m_ObjectHideFlags: 0

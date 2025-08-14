@@ -732,6 +732,7 @@ Transform:
   - {fileID: 638439079}
   - {fileID: 872527325}
   - {fileID: 1959702292}
+  - {fileID: 825907351}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &510882455
@@ -1782,6 +1783,104 @@ MonoBehaviour:
   scoreAmount: 1
   sourceType: 0
   isTrigger: 0
+--- !u!1 &825907350
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 825907351}
+  - component: {fileID: 825907352}
+  - component: {fileID: 825907353}
+  m_Layer: 0
+  m_Name: TcpEventClient
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &825907351
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 825907350}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 510516296}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &825907352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 825907350}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39be8584689e14b189fc123d72359857, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serverIp: 192.168.68.102
+  serverPort: 5050
+  connectTimeoutMs: 4000
+  running: 0
+--- !u!114 &825907353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 825907350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef2c2eebf212a48e5ac08c9f958caba9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  port: 5005
+  OnAnyEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnMoveLeft:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1630043746}
+        m_TargetAssemblyTypeName: ChickenMoveController, Assembly-CSharp
+        m_MethodName: MoveLeft
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnMoveRight:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1630043746}
+        m_TargetAssemblyTypeName: ChickenMoveController, Assembly-CSharp
+        m_MethodName: MoveRight
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnNoPerson:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &839856429
 GameObject:
   m_ObjectHideFlags: 0
@@ -3989,6 +4088,18 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1630043746 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 823032975782366121, guid: af68f6ffff31ff64c93521a587d234b1,
+    type: 3}
+  m_PrefabInstance: {fileID: 297721153}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8ded94b3ac8a42bb97913352d14b475, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1662315661
 GameObject:
   m_ObjectHideFlags: 0

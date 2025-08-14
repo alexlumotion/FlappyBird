@@ -21,6 +21,7 @@ public class GameObstacleBehaviour : MonoBehaviour
     public Vector3 resetScale = new Vector3(1, 0, 1);
 
     public GameObstacleAnimations animations;
+    public BubbleEmitterController bubbleEmitterController;
 
     public float testZ = 0f;
 
@@ -31,9 +32,13 @@ public class GameObstacleBehaviour : MonoBehaviour
         if (canReturnToPool && transform.position.z >= returnThresholdZ)
         {
             canReturnToPool = false; // ⛔ щоб більше не викликалося повторно
-            //transform.localScale = resetScale;
-            //poolManager.ReturnToPool(gameObject);
-            //PlayDisappearAnimation();
+                                     //transform.localScale = resetScale;
+                                     //poolManager.ReturnToPool(gameObject);
+                                     //PlayDisappearAnimation();
+            if (obstacleType == ObstacleType.Obstacle)
+                {
+                    bubbleEmitterController.StopEmitting();
+                }
             PlayDisappearAnimation(() =>
                 {
                     poolManager.ReturnToPool(gameObject);
@@ -45,6 +50,10 @@ public class GameObstacleBehaviour : MonoBehaviour
     {
         poolManager = GameObstacleRowManager.Instance;
         animations = GetComponent<GameObstacleAnimations>();
+        if (obstacleType == ObstacleType.Obstacle)
+        {
+            bubbleEmitterController = GetComponent<BubbleEmitterController>();
+        }
     }
 
     public void Init()
@@ -62,10 +71,11 @@ public class GameObstacleBehaviour : MonoBehaviour
     {
         animations.PlayDisappearAnimation(() =>
             {
-                //if (GameStateManager.Instance.CurrentState == GameStateMy.GameOver)
-                //{
-                    poolManager.ReturnToPool(gameObject);
-                //}
+                poolManager.ReturnToPool(gameObject);
+                if (obstacleType == ObstacleType.Obstacle)
+                {
+                    bubbleEmitterController.StopEmitting();
+                }
             });
     }
 
@@ -81,6 +91,10 @@ public class GameObstacleBehaviour : MonoBehaviour
                 else
                 {
                     PlayIdleAnimation();
+                    if (obstacleType == ObstacleType.Obstacle)
+                    {
+                        bubbleEmitterController.StartEmitting();
+                    }
                 }
                 
             });
