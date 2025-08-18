@@ -1828,10 +1828,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39be8584689e14b189fc123d72359857, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverIp: 192.168.68.102
-  serverPort: 5050
-  connectTimeoutMs: 4000
-  running: 0
 --- !u!114 &825907353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2356,6 +2352,7 @@ GameObject:
   m_Component:
   - component: {fileID: 980499183}
   - component: {fileID: 980499182}
+  - component: {fileID: 980499185}
   - component: {fileID: 980499184}
   m_Layer: 0
   m_Name: VideoPlayerManager
@@ -2372,7 +2369,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 980499181}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: e3da29f93a1144a47acff6b87dc9b68a, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: 14ffa41e038944651a53da71fde1bee8, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 349367652}
@@ -2425,13 +2422,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b516fc6e0c784437abe80c4651bc9d38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  videoPlayer: {fileID: 980499182}
+  videoPlayerForeground: {fileID: 980499182}
+  videoPlayerBackground: {fileID: 980499185}
   playOnStart: 0
   initialSpeed: 1
   speedStep: 0.1
   speedUp: 0
   speedDown: 0
   test: 0
+--- !u!328 &980499185
+VideoPlayer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 980499181}
+  m_Enabled: 1
+  m_VideoClip: {fileID: 32900000, guid: 0360e6d41b7284f47a8702a52abb2c43, type: 3}
+  m_TargetCameraAlpha: 1
+  m_TargetCamera3DLayout: 0
+  m_TargetCamera: {fileID: 349367652}
+  m_TargetTexture: {fileID: 0}
+  m_TimeReference: 0
+  m_TargetMaterialRenderer: {fileID: 0}
+  m_TargetMaterialProperty: <noninit>
+  m_RenderMode: 0
+  m_AspectRatio: 2
+  m_DataSource: 0
+  m_TimeUpdateMode: 2
+  m_PlaybackSpeed: 1
+  m_AudioOutputMode: 2
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
+  m_Url: 
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
+  m_PlayOnAwake: 0
+  m_SkipOnDrop: 1
+  m_Looping: 1
+  m_WaitForFirstFrame: 1
+  m_FrameReadyEventEnabled: 0
+  m_VideoShaders: []
 --- !u!1 &1011081312
 GameObject:
   m_ObjectHideFlags: 0

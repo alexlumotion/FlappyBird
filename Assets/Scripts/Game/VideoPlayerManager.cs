@@ -6,7 +6,8 @@ public class VideoPlayerManager : MonoBehaviour
     public static VideoPlayerManager Instance { get; private set; }
 
     [Header("Video Settings")]
-    public VideoPlayer videoPlayer;
+    public VideoPlayer videoPlayerForeground;
+    public VideoPlayer videoPlayerBackground;
     public bool playOnStart = false;
 
     [Header("Speed Settings")]
@@ -36,7 +37,7 @@ public class VideoPlayerManager : MonoBehaviour
 
         SetSpeed(initialSpeed);
 
-        if (playOnStart && videoPlayer != null)
+        if (playOnStart && videoPlayerForeground != null)
         {
             PlayVideo();
         }
@@ -68,9 +69,13 @@ public class VideoPlayerManager : MonoBehaviour
     /// </summary>
     public void PlayVideo()
     {
-        if (videoPlayer != null && !videoPlayer.isPlaying)
+        if (videoPlayerForeground != null && !videoPlayerForeground.isPlaying)
         {
-            videoPlayer.Play();
+            videoPlayerForeground.Play();
+        }
+        if (videoPlayerBackground != null && !videoPlayerBackground.isPlaying)
+        {
+            videoPlayerBackground.Play();
         }
     }
 
@@ -79,9 +84,13 @@ public class VideoPlayerManager : MonoBehaviour
     /// </summary>
     public void PauseVideo()
     {
-        if (videoPlayer != null && videoPlayer.isPlaying)
+        if (videoPlayerForeground != null && videoPlayerForeground.isPlaying)
         {
-            videoPlayer.Pause();
+            videoPlayerForeground.Pause();
+        }
+        if (videoPlayerBackground != null && videoPlayerBackground.isPlaying)
+        {
+            videoPlayerBackground.Pause();
         }
     }
 
@@ -90,17 +99,24 @@ public class VideoPlayerManager : MonoBehaviour
     /// </summary>
     public void ResetVideo()
     {
-        if (videoPlayer != null)
+        if (videoPlayerForeground != null)
         {
-            videoPlayer.Stop();            // Зупиняємо
-            videoPlayer.time = 0f;         // Скидаємо час
-            videoPlayer.Play();            // Запускаємо заново
+            videoPlayerForeground.Stop();            // Зупиняємо
+            videoPlayerForeground.time = 0f;         // Скидаємо час
+            videoPlayerForeground.Play();            // Запускаємо заново
+        }
+        if (videoPlayerBackground != null)
+        {
+            videoPlayerBackground.Stop();            // Зупиняємо
+            videoPlayerBackground.time = 0f;         // Скидаємо час
+            videoPlayerBackground.Play();            // Запускаємо заново
         }
     }
     public void SetSpeed(float speed)
     {
         speed = Mathf.Clamp(speed, 0.1f, 5f);
-        videoPlayer.playbackSpeed = speed;
+        videoPlayerForeground.playbackSpeed = speed;
+        videoPlayerBackground.playbackSpeed = speed;
         //Debug.Log($"🎬 Встановлено швидкість відео: {speed}");
     }
 }
