@@ -44,7 +44,7 @@ public class GameScoreView : MonoBehaviour
     }
     private void UpdateFinalScore(int newScore)
     {
-        scoreFinalText.text = "Ваш рахунок: " + newScore.ToString();
+        scoreFinalText.text = newScore.ToString();
     }
     private void UpdateMultiplier(int multiplier)
     {
@@ -62,7 +62,7 @@ public class GameScoreView : MonoBehaviour
     }
     private void UpdateMaxScore(int maxScore)
     {
-        bestScoreText.text = "Best Score: " + maxScore.ToString();
+        bestScoreText.text = maxScore.ToString();
     }
 
     private System.Collections.IEnumerator AnimateScale(Transform target, Vector3 original, float maxScale)

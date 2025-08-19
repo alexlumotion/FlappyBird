@@ -35,9 +35,11 @@ public class VideoPlayerManager : MonoBehaviour
     {
         //videoPlayer = GetComponent<VideoPlayer>();
 
+        //videoPlayerBackground.sort
+
         SetSpeed(initialSpeed);
 
-        if (playOnStart && videoPlayerForeground != null)
+        if (playOnStart && videoPlayerForeground != null && videoPlayerBackground != null)
         {
             PlayVideo();
         }

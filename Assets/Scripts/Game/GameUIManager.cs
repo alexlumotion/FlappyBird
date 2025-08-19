@@ -34,6 +34,7 @@ public class GameUIManager : MonoBehaviour
                 pauseUI?.SetActive(true);
                 break;
             case GameStateMy.GameOver:
+                gameplayUI?.SetActive(true);
                 gameOverUI?.SetActive(true);
                 break;
         }
