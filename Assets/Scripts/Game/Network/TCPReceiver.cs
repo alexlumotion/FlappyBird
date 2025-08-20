@@ -19,6 +19,7 @@ public class TCPReceiver : MonoBehaviour
     public UnityEngine.Events.UnityEvent OnMoveLeft;
     public UnityEngine.Events.UnityEvent OnMoveRight;
     public UnityEngine.Events.UnityEvent OnNoPerson;
+    public UnityEngine.Events.UnityEvent OnTPose;
 
     Thread worker;
     volatile bool running;
@@ -108,6 +109,8 @@ public class TCPReceiver : MonoBehaviour
                 OnMoveRight?.Invoke();
             else if (string.Equals(value, "NO_PERSON", StringComparison.OrdinalIgnoreCase))
                 OnNoPerson?.Invoke();
+            else if (string.Equals(value, "TPOSE_ON", StringComparison.OrdinalIgnoreCase))
+                OnTPose?.Invoke();
 
             // Якщо потрібні числа з payload:
             // if (evt != null) Debug.Log($"x={evt.x} v={evt.speed} d={evt.delta} dist={evt.dist}");
