@@ -22,6 +22,8 @@ public class GameLogicManager : MonoBehaviour
     {
         GameStateManager.Instance.SetIdle();
         GameScoreManager.Instance.ResetScore();
+        RoadAnimationManager.Instance.PlayAnimation();
+        VideoPlayerManager.Instance.ResetVideo();
     }
 
     // 📦 Методи кнопок
@@ -32,6 +34,17 @@ public class GameLogicManager : MonoBehaviour
         RoadAnimationManager.Instance.PlayAnimation();
         VideoPlayerManager.Instance.ResetVideo();
         RockPoolManager.Instance.SpawnRocks();
+        GameScoreManager.Instance.ResetScore();
+    }
+
+    public void OnGameOverButtonPressed()
+    {
+        GameStateManager.Instance.GameOver();
+        GameScoreManager.Instance.GameOver();
+        RoadAnimationManager.Instance.StopAnimation();
+        GameObstacleRowManager.Instance.ResetAllObstacles();
+        RockPoolManager.Instance.ResetAllRocks();
+        AutoStarter.Instance.StartTimer();
     }
 
     public void OnPauseButtonPressed()
@@ -50,13 +63,5 @@ public class GameLogicManager : MonoBehaviour
     {
         GameStateManager.Instance.SetIdle();
     }
-
-    public void OnGameOverButtonPressed()
-    {
-        GameStateManager.Instance.GameOver();
-        GameScoreManager.Instance.GameOver();
-        RoadAnimationManager.Instance.StopAnimation();
-        GameObstacleRowManager.Instance.ResetAllObstacles();
-        RockPoolManager.Instance.ResetAllRocks();
-    }
+    
 }

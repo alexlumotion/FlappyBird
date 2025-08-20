@@ -22,6 +22,8 @@ public class GameObstacleRowManager : MonoBehaviour
     private Queue<GameObject> bonusPool = new Queue<GameObject>();
     private List<GameObject> activeObstacles = new List<GameObject>();
 
+    private GameStateManager gameStateManager;
+
     private enum SpawnPattern
     {
         OneObstacle,
@@ -44,11 +46,14 @@ public class GameObstacleRowManager : MonoBehaviour
 
     void Start()
     {
+        gameStateManager = GameStateManager.Instance;
         InitializePools();
     }
 
     void Update()
     {
+        if (gameStateManager.CurrentState != GameStateMy.Playing) return;
+        
         float currentAngle = watchedTransform.rotation.eulerAngles.x;
         float deltaAngle = Mathf.DeltaAngle(lastTriggerAngle, currentAngle);
 
