@@ -6,7 +6,7 @@ using System.Threading;
 using System.Collections.Concurrent;
 using System;
 
-public class UdpReceiver : MonoBehaviour
+public class UDPReceiver : MonoBehaviour
 {
     public int port = 5005;
 
