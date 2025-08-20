@@ -36,6 +36,8 @@ public class RockPoolManager : MonoBehaviour
     public float angleMultiplier = 1;
     private float lastTriggerAngle = 0f;
 
+    private GameStateManager gameStateManager;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -50,11 +52,14 @@ public class RockPoolManager : MonoBehaviour
 
     void Start()
     {
+        gameStateManager = GameStateManager.Instance;
         InitializePool();
     }
 
     void Update()
     {
+        if (gameStateManager.CurrentState != GameStateMy.Playing) return;
+        
         for (int i = activeRocks.Count - 1; i >= 0; i--)
         {
             GameObject rock = activeRocks[i];

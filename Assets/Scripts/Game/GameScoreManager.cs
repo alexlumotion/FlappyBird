@@ -119,7 +119,7 @@ public class GameScoreManager : MonoBehaviour
         SaveMaxScore();
         LoadMaxScore();
         ShowFinalScore();
-        ResetScore();
+        //ResetScore();
     }
 
 }
