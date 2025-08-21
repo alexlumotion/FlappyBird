@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class AutoStarter : MonoBehaviour
+public class AutoStarterIdleState : MonoBehaviour
 {
 
-    public static AutoStarter Instance { get; private set; }
+    public static AutoStarterIdleState Instance { get; private set; }
 
     public float startTime = 5f;
     private float localTime = 5f;
@@ -19,7 +17,7 @@ public class AutoStarter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame

@@ -44,7 +44,7 @@ public class GameLogicManager : MonoBehaviour
         RoadAnimationManager.Instance.StopAnimation();
         GameObstacleRowManager.Instance.ResetAllObstacles();
         RockPoolManager.Instance.ResetAllRocks();
-        AutoStarter.Instance.StartTimer();
+        AutoStarterIdleState.Instance.StartTimer();
     }
 
     public void OnPauseButtonPressed()
