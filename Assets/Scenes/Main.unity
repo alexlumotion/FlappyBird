@@ -806,8 +806,6 @@ Transform:
   - {fileID: 1458284532}
   - {fileID: 472838567}
   - {fileID: 1011081313}
-  - {fileID: 980499183}
-  - {fileID: 1919327180}
   - {fileID: 1063713386}
   - {fileID: 638439079}
   - {fileID: 872527325}
@@ -2622,7 +2620,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 510516296}
+  m_Father: {fileID: 1063713386}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!328 &980499185
 VideoPlayer:
@@ -2807,7 +2805,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 980499183}
+  - {fileID: 1919327180}
   m_Father: {fileID: 510516296}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1063713387
@@ -5570,7 +5570,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 510516296}
+  m_Father: {fileID: 1063713386}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!328 &1919327181
 VideoPlayer:

@@ -45,6 +45,9 @@ public class GameLogicManager : MonoBehaviour
         GameObstacleRowManager.Instance.ResetAllObstacles();
         RockPoolManager.Instance.ResetAllRocks();
         AutoStarterIdleState.Instance.StartTimer();
+
+        VideoPlayerManager.Instance.PauseVideo();
+        RoadAnimationManager.Instance.PauseAnimation();
     }
 
     public void OnPauseButtonPressed()
@@ -62,6 +65,8 @@ public class GameLogicManager : MonoBehaviour
     public void OnIdleButtonPressed()
     {
         GameStateManager.Instance.SetIdle();
+        VideoPlayerManager.Instance.PlayVideo();
+        RoadAnimationManager.Instance.ResumeAnimation();
     }
     
 }

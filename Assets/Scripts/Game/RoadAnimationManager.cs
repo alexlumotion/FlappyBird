@@ -64,4 +64,15 @@ public class RoadAnimationManager : MonoBehaviour
             animator.SetTrigger("Play OFF");
         }
     }
+
+    public void PauseAnimation()
+    {
+        animator.speed = 0f;
+    }
+
+    public void ResumeAnimation()
+    {
+        animator.speed = 1f;
+    }
+
 }
